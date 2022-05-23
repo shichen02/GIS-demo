@@ -41,6 +41,8 @@ import java.util.Map;
  */
 public class ShapeFileAnalysis {
 
+    static List<SimpleFeature> globalCollection = new ArrayList<>();
+
     static SimpleFeatureType LOCATION;
 
     static {
@@ -51,17 +53,25 @@ public class ShapeFileAnalysis {
         builder.add("the_geom", Polygon.class);
         builder.length(15).add("Name", String.class); // <- 15 chars width for name field
         builder.add("number", Integer.class);
+        builder.add("Style", String.class);
         LOCATION = builder.buildFeatureType();
     }
 
     public static void main(String[] args) {
         test();
+        try {
+            write();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SchemaException e) {
+            e.printStackTrace();
+        }
     }
 
 
     public static void test() {
 //        String path = "D:\\test-file\\shapefile\\geo-json\\geo-json.shp";
-        String path = "D:\\test-file\\shapefile\\geo-json\\测试\\aaa.shp";
+        String path = "D:\\test-file\\shapefile\\geo-json\\测试\\aaa_面.shp";
         File file = new File(path);
 
         HashMap<String, Object> map = new HashMap<>();
@@ -74,6 +84,7 @@ public class ShapeFileAnalysis {
             Filter include = Filter.INCLUDE;
 
             SimpleFeatureCollection collection = source.getFeatures(include);
+
             SimpleFeatureIterator features = collection.features();
             while (features.hasNext()) {
                 SimpleFeature next = features.next();
@@ -84,6 +95,8 @@ public class ShapeFileAnalysis {
                         .forEach(e ->
                                 System.out.println(e));
                 System.out.println(next);
+
+                globalCollection.add(next);
             }
 
 
@@ -118,7 +131,6 @@ public class ShapeFileAnalysis {
 //        featureBuilder.add(1);
 //        SimpleFeature feature = featureBuilder.buildFeature(null);
 
-
         /**
          * 图像，多边形
          */
@@ -144,9 +156,9 @@ public class ShapeFileAnalysis {
         polygonBuilder.add(polygon);
         polygonBuilder.add("test");
         polygonBuilder.add(1);
+        SimpleFeature simpleFeature = polygonBuilder.buildFeature(null);
 
-
-        features.add(polygonBuilder.buildFeature(null));
+        features.add(simpleFeature);
 
         return features;
     }
@@ -160,7 +172,7 @@ public class ShapeFileAnalysis {
 
 //        final SimpleFeatureType TYPE = DataUtilities.createType("Location", "the_geom:Point:srid=4326," + "name:String," + "number:Integer");
 
-        File newFile = new File("D:\\test-file\\shapefile\\geo-json\\generate2.shp");
+        File newFile = new File("D:\\test-file\\shapefile\\geo-json\\generate8.shp");
 
         ShapefileDataStoreFactory dataStoreFactory = new ShapefileDataStoreFactory();
         Map<String, Serializable> params = new HashMap<>();
@@ -198,10 +210,14 @@ public class ShapeFileAnalysis {
              * class to wrap our list of features.
              */
             List<SimpleFeature> features = getFeatures();
-            SimpleFeatureCollection collection = new ListFeatureCollection(LOCATION, features);
+            SimpleFeatureCollection collection = new ListFeatureCollection(LOCATION, globalCollection);
             featureStore.setTransaction(transaction);
             try {
                 featureStore.addFeatures(collection);
+                System.out.println("==============");
+//                if (1==1){
+//                    throw new RuntimeException("233");
+//                }
                 transaction.commit();
             } catch (Exception problem) {
                 problem.printStackTrace();

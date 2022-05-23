@@ -1,7 +1,5 @@
 //package org.geotools.tutorial.quickstart.shapefile;
 //
-//import com.bsac.myselftools.huanghua.SensitivePointInfo;
-//import com.vividsolutions.jts.geom.*;
 //import org.geotools.data.FeatureSource;
 //import org.geotools.data.FeatureWriter;
 //import org.geotools.data.Transaction;
@@ -11,15 +9,14 @@
 //import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 //import org.geotools.referencing.crs.DefaultGeographicCRS;
 //import org.locationtech.jts.geom.MultiLineString;
+//import org.locationtech.jts.geom.MultiPolygon;
 //import org.opengis.feature.Property;
 //import org.opengis.feature.simple.SimpleFeature;
 //import org.opengis.feature.simple.SimpleFeatureType;
 //import org.opengis.geometry.coordinate.GeometryFactory;
 //import org.opengis.geometry.primitive.Point;
-//import org.opengis.referencing.crs.CoordinateReferenceSystem;
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
-//import org.springframework.web.multipart.MultipartFile;
 //
 //import java.io.File;
 //import java.io.FileOutputStream;
@@ -139,7 +136,7 @@
 //    }
 //
 //
-//    private static void writeFile(String filepath, List<SensitivePointInfo> pointInfoList) {
+//    private static void writeFile(String filepath) {
 //        try {
 //            //创建shape文件对象
 //            File file = new File(filepath);
@@ -167,6 +164,7 @@
 //                        pointInfo.getLatitude())));
 //                feature.setAttribute("NO", pointInfo.getNo());
 //                feature.setAttribute("NAME", pointInfo.getName());
+//                feature.setAttribute("Style", "BRUSH(fc:#00ff0050,id:ogr-brush-0);PEN(c:#000000ff,w:2.000000px,id:ogr-pen-0);LABEL(f:ºÚÌå,s:11.000000pt,c:#ffffffff,w:100.000000,o:#000000ff)");
 //            }
 //            writer.write();
 //            writer.close();
