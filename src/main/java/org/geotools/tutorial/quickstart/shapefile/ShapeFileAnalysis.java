@@ -33,6 +33,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 /**
  * @author tsc
@@ -75,6 +76,7 @@ public class ShapeFileAnalysis {
         File file = new File(path);
 
         HashMap<String, Object> map = new HashMap<>();
+
         try {
             map.put("url", file.toURI().toURL());
             DataStore dataStore = DataStoreFinder.getDataStore(map);
@@ -89,12 +91,17 @@ public class ShapeFileAnalysis {
             while (features.hasNext()) {
                 SimpleFeature next = features.next();
 
+                LOCATION = next.getFeatureType();
+
                 Collection<Property> properties = next.getProperties();
+                Predicate<String> predicate =  e -> e.contains("Style");
 
                 properties.stream()
-                        .forEach(e ->
-                                System.out.println(e));
-                System.out.println(next);
+                        .map(Property::toString)
+                        .filter(predicate)
+                        .forEach(System.out::println);
+
+
 
                 globalCollection.add(next);
             }
@@ -201,9 +208,9 @@ public class ShapeFileAnalysis {
         // 父类 source 负责读和写
         SimpleFeatureSource featureSource = newDataStore.getFeatureSource(typeName);
 //        SimpleFeatureType SHAPE_TYPE = featureSource.getSchema();
-        if (featureSource instanceof SimpleFeatureStore) {
-            // 子类 store 负责写
-            SimpleFeatureStore featureStore = (SimpleFeatureStore) featureSource;
+        if (featureSource instanceof SimpleFeatureStore ) {
+
+            SimpleFeatureStore  featureStore = (SimpleFeatureStore)featureSource;
             /*
              * SimpleFeatureStore has a method to add features from a
              * SimpleFeatureCollection object, so we use the ListFeatureCollection

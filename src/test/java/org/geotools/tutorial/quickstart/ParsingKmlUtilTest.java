@@ -8,6 +8,15 @@ import de.micromata.opengis.kml.v_2_2_0.LineString;
 import de.micromata.opengis.kml.v_2_2_0.LineStyle;
 import de.micromata.opengis.kml.v_2_2_0.Placemark;
 import de.micromata.opengis.kml.v_2_2_0.Style;
+import org.geotools.geometry.jts.JTS;
+import org.geotools.referencing.CRS;
+import org.geotools.referencing.crs.DefaultGeographicCRS;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Geometry;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
+import org.opengis.referencing.operation.TransformException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -105,6 +114,30 @@ class ParsingKmlUtilTest {
         try {
             kml.marshal(new File("D:\\test-file\\generate-Kml.kml"));
         } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void test03(){
+        try {
+
+            /**
+             * google earth
+             */
+            CoordinateReferenceSystem sourceCRS = CRS.decode("EPSG:3785");
+            CoordinateReferenceSystem targetCRS = CRS.decode("EPSG:23032");
+
+            DefaultGeographicCRS wgs84 = DefaultGeographicCRS.WGS84_3D;
+            MathTransform transform = CRS.findMathTransform(sourceCRS, wgs84, false);
+
+            Coordinate targetCoordinate = new Coordinate();
+            Coordinate sourceCoordinate = new Coordinate();
+            JTS.transform(sourceCoordinate, targetCoordinate, transform);
+
+
+
+        } catch (FactoryException | TransformException e) {
             e.printStackTrace();
         }
 
