@@ -24,14 +24,14 @@ import java.io.FileNotFoundException;
 class ParsingKmlUtilTest {
 
     public static void main(String[] args) {
-        test();
+        test02();
     }
 
     public static void test() {
 
         KmlProperty kmlProperty;
         ParsingKmlUtil parsingKmlUtil = new ParsingKmlUtil();
-        File file = new File("D:\\test-file\\generate-Kml.kml");
+        File file = new File("D:\\test-file\\kml\\generate-Kml.kml");
         kmlProperty = parsingKmlUtil.parseKmlForJAK(file);
 
         if (kmlProperty.getKmlPoints().size() > 0) {
@@ -64,8 +64,6 @@ class ParsingKmlUtilTest {
 //                .withName("London, UK").withOpen(Boolean.TRUE)
 //                .createAndSetPoint()
 //                .addToCoordinates(-0.126236, 51.500152);
-
-
 
         Document document = kml.createAndSetDocument();
 
@@ -112,7 +110,7 @@ class ParsingKmlUtilTest {
         kml.marshal();
         //marshals into file
         try {
-            kml.marshal(new File("D:\\test-file\\generate-Kml.kml"));
+            kml.marshal(new File("D:\\test-file\\generate-Kml-2.kml"));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
